@@ -1,6 +1,7 @@
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData, Column, String, Integer, create_engine, ForeignKey, DateTime, Table
+from sqlalchemy import MetaData, Column, String, Integer, ForeignKey,\
+    DateTime
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -11,10 +12,12 @@ convention = {
 }
 
 database_name = "casting"
-database_path = "postgres://{}:{}@{}/{}".format('vijay', 'password', 'localhost:5432', database_name)
+database_path = "postgres://{}:{}@{}/{}".format(
+    'vijay', 'password', 'localhost:5432', database_name)
 
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
+
 
 def setup_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
@@ -26,9 +29,11 @@ def setup_db(app):
 
 
 movies = db.Table('movies_association',
-    Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),
-    Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True)
-)
+                  Column('actor_id', Integer, ForeignKey('actors.id'),
+                         primary_key=True),
+                  Column('movie_id', Integer, ForeignKey('movies.id'),
+                         primary_key=True))
+
 
 class Actors(db.Model):
     __tablename__ = 'actors'
@@ -37,9 +42,9 @@ class Actors(db.Model):
     age = Column(Integer, nullable=False)
     gender = Column(String(20), nullable=False)
     movie = db.relationship('Movies',
-                secondary=movies,
-                backref=db.backref('actor', lazy=True))
-    
+                            secondary=movies,
+                            backref=db.backref('actor', lazy=True))
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -59,6 +64,7 @@ class Actors(db.Model):
             'gender': self.gender,
             'movies': self.movies
         }
+
 
 class Movies(db.Model):
     __tablename__ = 'movies'
