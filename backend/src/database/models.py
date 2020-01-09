@@ -83,8 +83,10 @@ class Movies(db.Model):
         db.session.commit()
 
     def format(self):
+        actors = list(map(Actors.format, self.actor))
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date
+            'release_date': self.release_date,
+            'actors': actors
         }

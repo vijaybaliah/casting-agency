@@ -42,6 +42,35 @@ def add_actors():
         abort(STATUS_UNPROCESSABLE)
 
 
+@app.route('/movies')
+def get_movies():
+    movies = list(map(Movies.format, Movies.query.all()))
+    result = {
+        "success": True,
+        "movies": movies
+    }
+    return jsonify(result)
+
+
+@app.route('/movies', methods=['POST'])
+def add_movies():
+    if request.data:
+        request_data = get_request_data(request)
+        new_movie = Movies(title=request_data['title'],
+                           release_date=request_data['release_date'])
+        actor = Actors.query.get(request_data['actor_id'])
+        new_movie.actor.append(actor)
+        Movies.insert(new_movie)
+        movies = list(map(Movies.format, [new_movie]))
+        result = {
+            "success": True,
+            "movies": movies
+        }
+        return jsonify(result)
+    else:
+        abort(STATUS_UNPROCESSABLE)
+
+
 @app.errorhandler(STATUS_UNPROCESSABLE)
 def unprocessable(error):
     return jsonify({
@@ -61,4 +90,4 @@ def not_found(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
