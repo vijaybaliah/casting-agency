@@ -67,7 +67,7 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.errorhandler(INTERNAL_SERVER_ERROR)
-    def internalserver(error):
+    def internal_server(error):
         return jsonify({
             "success": False,
             "error": INTERNAL_SERVER_ERROR,
