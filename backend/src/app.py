@@ -1,9 +1,7 @@
 from flask import Flask, jsonify, abort, request
-from database.models import setup_db, Actors, Movies
+from database.models import Actors, Movies
 import json
 
-app = Flask(__name__)
-setup_db(app)
 
 STATUS_CODE_SUCCESS = 200
 STATUS_NOT_FOUND = 404
@@ -87,7 +85,3 @@ def not_found(error):
         "error": STATUS_NOT_FOUND,
         "message": "resource not found"
     }), STATUS_NOT_FOUND
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
