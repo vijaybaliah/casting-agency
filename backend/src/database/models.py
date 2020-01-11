@@ -85,6 +85,13 @@ class Movies(db.Model):
 
     def update(self):
         db.session.commit()
+        actors = list(map(Actors.format, self.actor))
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release_date': self.release_date,
+            'actors': actors
+        }
 
     def format(self):
         actors = list(map(Actors.format, self.actor))

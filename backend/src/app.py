@@ -39,6 +39,45 @@ def create_app():
         else:
             abort(STATUS_UNPROCESSABLE)
 
+    @app.route('/actors', methods=['PATCH'])
+    def update_actors():
+        if request.data:
+            request_data = get_request_data(request)
+            actor = Actors.query.get(request_data['id'])
+            if actor:
+                actor.name = request_data['name']
+                actor.age = request_data['age']
+                actor.gender = request_data['gender']
+                Actors.update(actor)
+                actors = list(map(Actors.format, [actor]))
+                result = {
+                    "success": True,
+                    "actors": actors
+                }
+                return jsonify(result)
+            else:
+                abort(STATUS_NOT_FOUND)
+        else:
+            abort(STATUS_UNPROCESSABLE)
+
+    @app.route('/actors', methods=['DELETE'])
+    def delete_actors():
+        if request.data:
+            request_data = get_request_data(request)
+            actor = Actors.query.get(request_data['id'])
+            if actor:
+                Actors.delete(actor)
+                actors = list(map(Actors.format, [actor]))
+                result = {
+                    "success": True,
+                    "actors": actors
+                }
+                return jsonify(result)
+            else:
+                abort(STATUS_NOT_FOUND)
+        else:
+            abort(STATUS_UNPROCESSABLE)
+
     @app.route('/movies')
     def get_movies():
         movies = list(map(Movies.format, Movies.query.all()))
@@ -63,6 +102,46 @@ def create_app():
                 "movies": movies
             }
             return jsonify(result)
+        else:
+            abort(STATUS_UNPROCESSABLE)
+
+    @app.route('/movies', methods=['PATCH'])
+    def update_movies():
+        if request.data:
+            request_data = get_request_data(request)
+            movie = Movies.query.get(request_data['id'])
+            if movie:
+                movie.title = request_data['title']
+                movie.release_date = request_data['release_date']
+                actor_id = request_data['actor_id']
+                actor = Actors.query.get(actor_id)
+                movie.actor = [actor]
+                updated_movie = Movies.update(movie)
+                result = {
+                    "success": True,
+                    "movies": updated_movie
+                }
+                return jsonify(result)
+            else:
+                abort(STATUS_NOT_FOUND)
+        else:
+            abort(STATUS_UNPROCESSABLE)
+
+    @app.route('/movies', methods=['delete'])
+    def delete_movies():
+        if request.data:
+            request_data = get_request_data(request)
+            movie = Movies.query.get(request_data['id'])
+            if movie:
+                Movies.delete(movie)
+                movies = list(map(Movies.format, [movie]))
+                result = {
+                    "success": True,
+                    "movies": movies
+                }
+                return jsonify(result)
+            else:
+                abort(STATUS_NOT_FOUND)
         else:
             abort(STATUS_UNPROCESSABLE)
 
