@@ -2,7 +2,8 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, Column, String, Integer, ForeignKey,\
     DateTime
-import os
+
+from src.utils.helpers import get_env_variable
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -12,10 +13,9 @@ convention = {
     "pk": "pk_%(table_name)s"
 }
 
-database_name = "casting"
 database_path = "postgres://{}:{}@{}/{}".format(
-    'vijay', 'password', 'localhost:5432', database_name)
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', database_path)
+    'vijay', 'password', 'localhost:5432', 'casting')
+SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
