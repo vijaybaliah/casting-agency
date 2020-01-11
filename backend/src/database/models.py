@@ -2,6 +2,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, Column, String, Integer, ForeignKey,\
     DateTime
+import os
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -14,18 +15,17 @@ convention = {
 database_name = "casting"
 database_path = "postgres://{}:{}@{}/{}".format(
     'vijay', 'password', 'localhost:5432', database_name)
-
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 
 def setup_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     Migrate(app, db)
-    # db.create_all()
 
 
 movies = db.Table('movies_association',
