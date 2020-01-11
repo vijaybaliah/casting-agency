@@ -1,4 +1,4 @@
-from flask import jsonify, abort, request
+from flask import Flask, jsonify, abort, request
 from src.database.models import Actors, Movies
 import json
 
@@ -6,6 +6,8 @@ import json
 STATUS_CODE_SUCCESS = 200
 STATUS_NOT_FOUND = 404
 STATUS_UNPROCESSABLE = 422
+
+app = Flask(__name__)
 
 
 def get_request_data(request):

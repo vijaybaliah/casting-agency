@@ -26,6 +26,7 @@ print('SQLALCHEMY_DATABASE_URI: ', SQLALCHEMY_DATABASE_URI)
 def setup_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["DEBUG"] = True
     db.app = app
     db.init_app(app)
     Migrate(app, db)
