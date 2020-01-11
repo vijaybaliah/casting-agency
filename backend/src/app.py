@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 from src.database.models import Actors, Movies
-from src.utils.constants import STATUS_UNPROCESSABLE, STATUS_NOT_FOUND
+from src.utils.constants import STATUS_UNPROCESSABLE, STATUS_NOT_FOUND,\
+     INTERNAL_SERVER_ERROR
 
 
 def get_request_data(request):
@@ -64,6 +65,14 @@ def create_app():
             return jsonify(result)
         else:
             abort(STATUS_UNPROCESSABLE)
+    
+    @app.errorhandler(INTERNAL_SERVER_ERROR)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": INTERNAL_SERVER_ERROR,
+            "message": "internal server error"
+        }), INTERNAL_SERVER_ERROR
 
     @app.errorhandler(STATUS_UNPROCESSABLE)
     def unprocessable(error):
