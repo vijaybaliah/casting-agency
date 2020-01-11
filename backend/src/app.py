@@ -1,12 +1,9 @@
 from flask import Flask, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
-from src.database.models import Actors, Movies
 import json
 
-
-STATUS_CODE_SUCCESS = 200
-STATUS_NOT_FOUND = 404
-STATUS_UNPROCESSABLE = 422
+from src.database.models import Actors, Movies
+from src.utils.constants import STATUS_UNPROCESSABLE, STATUS_NOT_FOUND
 
 
 def get_request_data(request):
@@ -24,14 +21,13 @@ def create_app():
         }
         return jsonify(result)
 
-
     @app.route('/actors', methods=['POST'])
     def add_actors():
         if request.data:
             request_data = get_request_data(request)
             new_actor = Actors(name=request_data['name'],
-                            age=request_data['age'],
-                            gender=request_data['gender'])
+                               age=request_data['age'],
+                               gender=request_data['gender'])
             Actors.insert(new_actor)
             actors = list(map(Actors.format, [new_actor]))
             result = {
@@ -42,7 +38,6 @@ def create_app():
         else:
             abort(STATUS_UNPROCESSABLE)
 
-
     @app.route('/movies')
     def get_movies():
         movies = list(map(Movies.format, Movies.query.all()))
@@ -52,13 +47,12 @@ def create_app():
         }
         return jsonify(result)
 
-
     @app.route('/movies', methods=['POST'])
     def add_movies():
         if request.data:
             request_data = get_request_data(request)
             new_movie = Movies(title=request_data['title'],
-                            release_date=request_data['release_date'])
+                               release_date=request_data['release_date'])
             actor = Actors.query.get(request_data['actor_id'])
             new_movie.actor.append(actor)
             Movies.insert(new_movie)
@@ -71,7 +65,6 @@ def create_app():
         else:
             abort(STATUS_UNPROCESSABLE)
 
-
     @app.errorhandler(STATUS_UNPROCESSABLE)
     def unprocessable(error):
         return jsonify({
@@ -79,7 +72,6 @@ def create_app():
             "error": STATUS_UNPROCESSABLE,
             "message": "unprocessable"
         }), STATUS_UNPROCESSABLE
-
 
     @app.errorhandler(STATUS_NOT_FOUND)
     def not_found(error):
