@@ -25,7 +25,7 @@ def setup_db(app):
     db.app = app
     db.init_app(app)
     Migrate(app, db)
-    db.create_all()
+    # db.create_all()
 
 
 movies = db.Table('movies_association',
