@@ -19,9 +19,13 @@ SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
+# sanity check
+print('SQLALCHEMY_DATABASE_URI: ', SQLALCHEMY_DATABASE_URI)
+
 
 def setup_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     Migrate(app, db)
