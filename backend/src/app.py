@@ -5,6 +5,7 @@ import json
 from src.database.models import Actors, Movies
 from src.utils.constants import STATUS_UNPROCESSABLE, STATUS_NOT_FOUND,\
     INTERNAL_SERVER_ERROR
+from src.auth import AuthError, requires_auth
 
 
 def get_request_data(request):
@@ -14,7 +15,8 @@ def get_request_data(request):
 def create_app():
     app = Flask(__name__)
     @app.route('/actors')
-    def get_actors():
+    @requires_auth('get:actors')
+    def get_actors(payload):
         actors = list(map(Actors.format, Actors.query.all()))
         result = {
             "success": True,
@@ -23,7 +25,8 @@ def create_app():
         return jsonify(result)
 
     @app.route('/actors', methods=['POST'])
-    def add_actors():
+    @requires_auth('post:actors')
+    def add_actors(payload):
         if request.data:
             request_data = get_request_data(request)
             new_actor = Actors(name=request_data['name'],
@@ -40,7 +43,8 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.route('/actors', methods=['PATCH'])
-    def update_actors():
+    @requires_auth('patch:actors')
+    def update_actors(payload):
         if request.data:
             request_data = get_request_data(request)
             actor = Actors.query.get(request_data['id'])
@@ -61,7 +65,8 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.route('/actors', methods=['DELETE'])
-    def delete_actors():
+    @requires_auth('delete:actors')
+    def delete_actors(payload):
         if request.data:
             request_data = get_request_data(request)
             actor = Actors.query.get(request_data['id'])
@@ -79,7 +84,8 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.route('/movies')
-    def get_movies():
+    @requires_auth('get:movies')
+    def get_movies(payload):
         movies = list(map(Movies.format, Movies.query.all()))
         result = {
             "success": True,
@@ -88,7 +94,8 @@ def create_app():
         return jsonify(result)
 
     @app.route('/movies', methods=['POST'])
-    def add_movies():
+    @requires_auth('post:movies')
+    def add_movies(payload):
         if request.data:
             request_data = get_request_data(request)
             new_movie = Movies(title=request_data['title'],
@@ -106,7 +113,8 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.route('/movies', methods=['PATCH'])
-    def update_movies():
+    @requires_auth('patch:movies')
+    def update_movies(payload):
         if request.data:
             request_data = get_request_data(request)
             movie = Movies.query.get(request_data['id'])
@@ -128,7 +136,8 @@ def create_app():
             abort(STATUS_UNPROCESSABLE)
 
     @app.route('/movies', methods=['delete'])
-    def delete_movies():
+    @requires_auth('delete:movies')
+    def delete_movies(payload):
         if request.data:
             request_data = get_request_data(request)
             movie = Movies.query.get(request_data['id'])
@@ -168,6 +177,10 @@ def create_app():
             "error": STATUS_NOT_FOUND,
             "message": "resource not found"
         }), STATUS_NOT_FOUND
+    
+    @app.errorhandler(AuthError)
+    def auth_error(e):
+        return jsonify(e.error), e.status_code
 
     with app.app_context():
         db = SQLAlchemy()
