@@ -19,9 +19,6 @@ SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
-# sanity check
-print('SQLALCHEMY_DATABASE_URI: ', SQLALCHEMY_DATABASE_URI)
-
 
 def setup_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
