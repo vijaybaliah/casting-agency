@@ -158,9 +158,14 @@ request body
 ```
 - permission required `delete:movies`
 
+
+##### Heroku Domain
+
+The project has been hosted in `https://vijay-casting-agency.herokuapp.com` and has the above mentioned routes for example `https://vijay-casting-agency.herokuapp.com/actors` etc
+
 ##### Testing
 
-Inorder to run the test import the post man collection `casting agency.postman_collection.json` and click on run
+Inorder to run the test import the post man collection `casting agency.postman_collection.json` and click on run. Kindly note the collection uses your localhost:5000 server
 
 ##### Error Codes
 
