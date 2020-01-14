@@ -14,7 +14,7 @@ convention = {
 }
 
 database_path = "postgres://{}:{}@{}/{}".format(
-    'vijay', 'password', 'localhost:5432', 'casting')
+    'postgres', 'password', 'localhost:5432', 'casting')
 SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
