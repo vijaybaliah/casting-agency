@@ -1,13 +1,14 @@
 import json
-from flask import request, _request_ctx_stack
+from flask import request
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
+from src.utils.helpers import get_env_variable
 
-AUTH0_DOMAIN = 'vijayfsnd.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'casting'
+AUTH0_DOMAIN = get_env_variable('AUTH0_DOMAIN', 'vijayfsnd.auth0.com')
+ALGORITHMS = [get_env_variable('ALGORITHMS', 'RS256')]
+API_AUDIENCE = get_env_variable('API_AUDIENCE', 'casting')
 
 
 class AuthError(Exception):

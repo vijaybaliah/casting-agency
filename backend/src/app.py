@@ -177,7 +177,7 @@ def create_app():
             "error": STATUS_NOT_FOUND,
             "message": "resource not found"
         }), STATUS_NOT_FOUND
-    
+
     @app.errorhandler(AuthError)
     def auth_error(e):
         return jsonify(e.error), e.status_code
