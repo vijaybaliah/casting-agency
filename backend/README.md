@@ -1,5 +1,9 @@
 # Casting Agency Backend
 
+## Motivation
+
+In the media industry, we need to find out which actor is currently available for booking the movies here is where the casting agency comes into the picture. It exposes API with restricted access to members so that the members can utilize the information to book the same.
+
 ## Getting Started
 
 ### Installing Dependencies
