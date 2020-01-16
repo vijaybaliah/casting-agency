@@ -169,7 +169,12 @@ The project has been hosted in `https://vijay-casting-agency.herokuapp.com` and 
 
 ##### Testing
 
-Inorder to run the test import the post man collection `casting agency.postman_collection.json` and click on run. Kindly note the collection uses your localhost:5000 server
+```
+dropdb casting_test -U postgres
+createdb casting_test -U postgres
+psql casting_test < casting.psql
+python test_app.py
+```
 
 ##### Error Codes
 

@@ -183,6 +183,7 @@ def create_app():
         return jsonify(e.error), e.status_code
 
     with app.app_context():
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
         db = SQLAlchemy()
         db.init_app(app)
         db.create_all()

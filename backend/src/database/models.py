@@ -13,16 +13,13 @@ convention = {
     "pk": "pk_%(table_name)s"
 }
 
-database_path = "postgres://{}:{}@{}/{}".format(
-    'postgres', 'password', 'localhost:5432', 'casting')
-SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL', database_path)
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 
-def setup_db(app):
+def setup_db(app, database_path):
+    SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL', database_path)
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["DEBUG"] = True
     db.app = app
     db.init_app(app)
